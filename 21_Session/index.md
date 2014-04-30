@@ -70,7 +70,7 @@ Defines the session manager that get's used when no manager instance name is giv
 	</tr>
 </table>
 
-### File Driver
+### Example
 
 This is an example file driver configuration:
 
@@ -100,3 +100,36 @@ This is an example file driver configuration:
 	),
 ),
 ```
+
+## Drivers
+
+CCF ship with the following drivers:
+
+ * **file**: _PHP serialized._
+ * **json**: _json encoded file._
+ * **cookie**: _json encoded and crypted string in the cookies._
+ * **db**: _Stored using the DB handler._
+ 
+ 
+### Cookie Driver
+
+The cookie driver has some custom options:
+
+<table class="table table-bordered">
+	<tr>
+		<th>Key</th>
+		<th>Default</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>cookie_suffix</td>
+		<td><code>-session-store</code></td>
+		<td>The name used for the cookie that holds the session data.</td>
+	</tr>
+	<tr>
+		<td>crypt_salt</td>
+		<td><code>null</code></td>
+		<td>A salt to encrypt the cookies with, to avoid user manipulation.</td>
+	</tr>
+</table>
+ 
