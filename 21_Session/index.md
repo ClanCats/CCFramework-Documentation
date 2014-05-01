@@ -133,3 +133,30 @@ The cookie driver has some custom options:
 	</tr>
 </table>
  
+ 
+### Database Driver
+
+The database driver has some custom options:
+
+<table class="table table-bordered">
+	<tr>
+		<th>Key</th>
+		<th>Default</th>
+		<th>Description</th>
+	</tr>
+	<tr>
+		<td>database</td>
+		<td><code>null</code></td>
+		<td>The database instance used to store the data.</td>
+	</tr>
+	<tr>
+		<td>table</td>
+		<td><code>sessions</code></td>
+		<td>The table used to store the session data.</td>
+	</tr>
+	<tr>
+		<td>index_fields</td>
+		<td><code>array( ... )</code></td>
+		<td>An array of session fields that are indexed. These fields wont get serialised. This means they should exist as columns in the database table.</td>
+	</tr>
+</table>
