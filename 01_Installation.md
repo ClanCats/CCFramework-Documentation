@@ -84,6 +84,8 @@ You can create your complete own script to return the runtime environment or you
 /boot/environment.php
 ```
 
+> Check out the environment docs: [Environment](/docs/application/environment)
+
 #### Paths
 
 Plan to run multiple CCF installations on one mashine? Using just one single core? This is absolutely no problem you can modify the CCF paths. 
@@ -107,9 +109,19 @@ You will find an initial **main configuration** file under:
 /CCF/app/config/main.config.php
 ```
 
-**1. Security Salt**
+#### Security Salt
 
 At several point CCF is going to crypt stuff and to do that it uses a salt. You should define your own salt to keep your application secure.
+
+You can generate a random salt using the following command:
+
+```
+$ php cli doctor::security_key
+```
+
+**When using composer to create a new project the salt is generated automatically.**
+
+Otherwise you will find the key under security in the main configuration:
 
 ```php
 'security' => array(
@@ -117,7 +129,7 @@ At several point CCF is going to crypt stuff and to do that it uses a salt. You 
 ),
 ```
 
-**2. Path**
+#### Path offset
 
 Maybe you would like to run your application not from the domain root. Instead from a subfolder in this example *forums*.
 
@@ -127,6 +139,8 @@ Maybe you would like to run your application not from the domain root. Instead f
     'path'		=> '/forums/',
 ),
 ```
+
+> For everything else checkout the main configuration docs: [Configuration](/docs/application/main_configuration/)
 
 ---
 
