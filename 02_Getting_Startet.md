@@ -137,3 +137,79 @@ return array(
 _CCF will **not** create the database, you have to create it your own using phpmyadmin, cli or what every prefer._
 
 > **Note:** The full documentation about the database configuration. [database configuration](/docs/database/)
+
+#### run the migrations
+
+Now we can run the migrations this allows us to use the built in user system and the database sessions.
+
+```
+$ php cli migrator::migrate
+```
+
+_You can but your really should not do this step manually._
+
+#### blog migration ( table )
+
+Now we have to create a new migration to create our blog table.
+
+```
+php cli migrator::create bloginit
+```
+
+Will generate an file under: `CCF/app/database/bloginit_1401381259.sql`
+
+Now open that file and add the SQL queries you would like to run. For the blog example we add something like:
+
+```sql
+# ---> up
+
+CREATE TABLE IF NOT EXISTS `blog_posts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `created_at` int(11) NOT NULL,
+  `modified_at` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+# ---> down
+
+DROP TABLE `blog_posts`;
+````
+
+Now we can run the migrator again to run our newly created blog table migration.
+
+```
+$ php cli migrator::migrate
+```
+
+### Model
+
+Because we have now our `blog_posts` table we can generate a model out of it.
+
+```
+php cli shipyard::model Post blog_posts
+```
+
+This creates the model class for us. You can find it under: `CCF/app/classes/Post.php`
+
+```php
+class Post extends \DB\Model
+{
+   public static $_defaults = array(
+      'id',
+      'title'        => array( 'string', '' ),
+      'content'      => array( 'string', '' ),
+      'created_by'   => array( 'int', 0 ),
+      'created_at'   => array( 'int', 0 ),
+      'modified_at'  => array( 'int', 0 )
+   );
+}
+```
+
+Because we want the `created_at` and `modified_at` field to be set automatically we have to add the timestamps property.
+
+```php
+protected static $_timestamps = true;
+```
