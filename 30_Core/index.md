@@ -1,0 +1,3 @@
+{
+	"redirect": "docs/core/configuration/"
+}
