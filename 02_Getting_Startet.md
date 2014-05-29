@@ -24,7 +24,19 @@ So lets take a look at the most important one, your application:
 
 These are the most common bundle components, of course there are more and you can define your own ones.
 
-## Router
+## Preparing 
+
+### Application name
+
+First of all we are going to setup the application name. Open your application class under: `CCF/app/App.php`
+
+There you will see a static property called name. Change it to what ever you like in this example im going to use CCNews.
+
+```php
+public static $name = 'CCNews';
+```
+
+### Router
 
 For our little blog we are going to use the url pattern `news/`. So open your **router.config.php** in this file you can define routes that get added on application _wake_ to the router.
 
@@ -33,20 +45,95 @@ For our little blog we are going to use the url pattern `news/`. So open your **
 In this file you will see the base routes for your application.
 Just like #root, #404 etc. add your new route at the end of the array.
 
-_example.com/news/ -> execute BlogController_
+_example.com/news/ -> alias blog -> execute BlogController_
 
 ```php
-'news'	  => 'Blog',
+'news@blog'	=> 'Blog',
 ```
 
-## Controller
+### Controller
 
-You can create an controller manually or using the _command line interface_ just like every other class also.
+In the next step we have to create the `BlogController`. You can create a controller manually or by using the _command line interface_ just like every other class.
 
-**cli:**
+`shipyard::controller [name] [superclass]`
 
 ```
-$ php cli shipyard::controller Blog
+$ php cli shipyard::controller Blog CCViewController
 ```
 
+> **Note:** you might want to change the shipyard configuration first so that CCF generates the correct headers. [shipyard configuration](/docs/shipyard/)
 
+Will create the following class at `CCF/app/controllers/BlogController.php`.
+
+```php
+class BlogController extends \CCViewController
+{
+   /**
+    * controller wake
+    * 
+    * @return void|CCResponse
+    */
+   public function wake()
+   {
+      // Do stuff
+   }
+
+   /**
+    * index action
+    * 
+    * @return void|CCResponse
+    */
+   public function action_index()
+   {
+      echo "BlogController";
+   }
+
+   /**
+    * controller sleep
+    * 
+    * @return void
+    */
+   public function sleep()
+   {
+      // Do stuff
+   }
+}
+```
+
+Now we can open execute our blog by opening `/news/` and we should see the default output: `BlogController`.
+
+### Migration ( Database )
+
+Now we are going to link the database, run the migrations and create the blog table.
+
+#### configure the database
+
+Your database configuration is located under `CCF/app/config/database.config.php`. If the file doesn't exist, create it.
+
+By default the database configuration is going to use the application name for the database name. So in my case it would be `db_ccnews`.
+
+But this is just the default setting so change the database configuration to your needs.
+
+```php
+/*
+ *---------------------------------------------------------------
+ * Database configuration
+ *---------------------------------------------------------------
+ */
+return array(
+   'main' => array(
+      'driver'    => 'mysql',
+      
+      'db'        => 'my_database_name',
+      
+      'host'      => '127.0.0.1',
+      'user'      => '<database username>',
+      'pass'      => '<database password>',
+      'charset'   => 'utf8'
+   ),
+);
+```
+
+_CCF will **not** create the database, you have to create it your own using phpmyadmin, cli or what every prefer._
+
+> **Note:** The full documentation about the database configuration. [database configuration](/docs/database/)
