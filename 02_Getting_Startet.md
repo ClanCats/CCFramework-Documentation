@@ -24,17 +24,21 @@ So lets take a look at the most important one, your application:
 
 These are the most common bundle components, of course there are more and you can define your own ones.
 
+---
+
 ## Preparing 
 
 ### Application name
 
 First of all we are going to setup the application name. Open your application class under: `CCF/app/App.php`
 
-There you will see a static property called name. Change it to what ever you like in this example im going to use CCNews.
+There you will see a static property called name. Change it to what ever you like in this example im going to use "Example".
 
 ```php
-public static $name = 'CCNews';
+public static $name = 'Example';
 ```
+
+---
 
 ### Router
 
@@ -50,6 +54,8 @@ _example.com/news/ -> alias blog -> execute BlogController_
 ```php
 'news@blog'	=> 'Blog',
 ```
+
+---
 
 ### Controller
 
@@ -68,31 +74,16 @@ Will create the following class at `CCF/app/controllers/BlogController.php`.
 ```php
 class BlogController extends \CCViewController
 {
-   /**
-    * controller wake
-    * 
-    * @return void|CCResponse
-    */
    public function wake()
    {
       // Do stuff
    }
 
-   /**
-    * index action
-    * 
-    * @return void|CCResponse
-    */
    public function action_index()
    {
       echo "BlogController";
    }
 
-   /**
-    * controller sleep
-    * 
-    * @return void
-    */
    public function sleep()
    {
       // Do stuff
@@ -102,6 +93,10 @@ class BlogController extends \CCViewController
 
 Now we can open execute our blog by opening `/news/` and we should see the default output: `BlogController`.
 
+<img src="/assets/images/getting_started/1.png" style="max-width: 435px;" class="box-shadow-light" />
+
+---
+
 ### Migration ( Database )
 
 Now we are going to link the database, run the migrations and create the blog table.
@@ -110,7 +105,7 @@ Now we are going to link the database, run the migrations and create the blog ta
 
 Your database configuration is located under `CCF/app/config/database.config.php`. If the file doesn't exist, create it.
 
-By default the database configuration is going to use the application name for the database name. So in my case it would be `db_ccnews`.
+By default the database configuration is going to use the application name for the database name. So in my case it would be `db_example`.
 
 But this is just the default setting so change the database configuration to your needs.
 
@@ -153,7 +148,7 @@ _You can but your really should not do this step manually._
 Now we have to create a new migration to create our blog table.
 
 ```
-php cli migrator::create bloginit
+$ php cli migrator::create bloginit
 ```
 
 Will generate an file under: `CCF/app/database/bloginit_1401381259.sql`
@@ -184,12 +179,14 @@ Now we can run the migrator again to run our newly created blog table migration.
 $ php cli migrator::migrate
 ```
 
+---
+
 ### Model
 
 Because we have now our `blog_posts` table we can generate a model out of it.
 
 ```
-php cli shipyard::model Post blog_posts
+$ php cli shipyard::model Post blog_posts
 ```
 
 This creates the model class for us. You can find it under: `CCF/app/classes/Post.php`
@@ -213,3 +210,133 @@ Because we want the `created_at` and `modified_at` field to be set automatically
 ```php
 protected static $_timestamps = true;
 ```
+
+---
+
+## Adding functionality
+
+### Create the view
+
+Next we are going to build the _create post_ action to be able to fill the table. For this we need our first view so go and create a new php file under: `CCF/app/view/blog/create.php`.
+
+In this view we are going to have a simple form:
+```php
+<?php use UI\Form; ?>
+<div class="create-post-form-container">
+<?php echo Form::start( 'post-create', array( 'method' => 'post', 'class' => 'form-horizontal' ) ); ?>
+
+    <div class="form-group">
+        <?php echo Form::label( 'title', 'Title' )->add_class( 'col-sm-2' ); ?>
+        <div class="col-sm-10">
+              <?php echo Form::input( 'title' ); ?>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <?php echo Form::label( 'content', 'Text' )->add_class( 'col-sm-2' ); ?>
+        <div class="col-sm-10">
+              <?php echo Form::textarea( 'content' ); ?>
+        </div>
+    </div>
+
+    <!-- buttons -->
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="submit" class="btn btn-primary">Create</button>
+        </div>
+    </div>
+
+<?php echo Form::end(); ?>
+</div>
+```
+
+---
+
+### Link it with the controller
+
+Now we have to link the view with our controller so we have to create a new action.
+
+```php
+public function action_create()
+{
+    // using the theme view factory 
+    $this->view = $this->theme->view( 'blog/create' );
+}
+```
+
+By opening now `news/create` you should see the form:
+
+<img src="/assets/images/getting_started/2.png" style="max-width: 488px;" class="box-shadow-light" />
+
+---
+
+### Writing the create action
+
+#### Title / Topic
+
+Let's also change the title / topic attribute so that our page title is not just "no title / example".
+
+```php
+$this->theme->topic = "Create new post";
+```
+
+#### Getting the form data
+
+```php
+// lets check if the form has been posted
+if ( CCIn::method( 'post' ) )
+{
+    // create new Post model
+    $post = new Post;
+    
+    // assign specific post data
+    $post->strict_assign( array( 'title', 'content' ), CCIn::all( 'post' ) );
+    
+    // save the new post to the database
+    $post->save();
+    
+    // add an ui message
+    UI\Alert::flash( 'success', 'Your post has been created successfully.' );
+    
+    // redirect to index
+    return CCRedirect::action( 'index' );
+}
+```
+
+Now when you enter some data in your form and click create you should be redirected to your index action and see the ui alert.
+
+<img src="/assets/images/getting_started/3.png" style="max-width: 458px;" class="box-shadow-light" />
+
+---
+
+### Writing the index action
+
+Now that we are able to insert data we can start displaying them. So create a new view under `CCF/app/views/blog/index.php`.
+
+In our `BlogController` index action:
+
+```php
+public function action_index()
+{
+    $this->theme->topic = "News";
+    
+    $this->view = $this->theme->view( 'blog/index' );
+    
+    $this->view->posts = Post::find();
+}
+```
+
+And in the newly created view:
+
+```php
+<?php foreach( $posts as $post ) : ?>
+<div>
+    <h2><?php echo $post->title; ?></h2>
+    <div><?php echo $post->content; ?></div>
+    <small><?php echo CCDate::format( $post->created_at ); ?></small>
+</div>
+<?php endforeach; ?>
+```
+And now we should be able to see our posts:
+
+<img src="/assets/images/getting_started/4.png" style="max-width: 463px;" class="box-shadow-light" />
