@@ -6,6 +6,4 @@
 
 Beta 2.0
 
-Unser Webdevelopment basiert grösstenteils auf dem revolutionären **ClanCats Framework**. Auf PHP aufbauend, bietet dieses HMVC-Framework nahezu grenzenlose kreative Freiheit, dynamische Ausbaumöglichkeiten, blitzschnelle Verarbeitung und sehr hohe Stabilität, ohne dabei an Struktur und Klarheit einzubüssen. Es richtet sich hauptsächlich an Webdeveloper, welche sich nicht mehr mit den inherenten Nachteilen anderer Frameworks herumärgern und sich voll und ganz auf ihr aktuelles Projekt konzentrieren möchten.
-
-Zudem zeichnet es sich durch seine ausgesprochene Teamfreundlichkeit und Klarheit aus, wodurch die Realisierung grosser Projekte als Gruppe effizienter angegangen werden kann.
+Building upon PHP, this HMVC framework offers creative freedom, dynamic extensibility, fast processing and a stable core, without trading in any amount of structure and ease of understanding. It is primarily directed towards webdevelopers who don’t want the hassle of dealing with inherent flaws and simply wish to concentrate on their current project. Additionally, it sets itself apart through a great deal of team-friendliness and clarity, allowing the realization of large projects as a group more efficiently.

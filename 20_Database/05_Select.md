@@ -1,14 +1,14 @@
 Using the query builder makes your life as a developer much easier. No more caring about _Sql injection_ and syntax errors.
 
-## Select query
+## Select basics
 
 Let's create a simple select:
 
 ```php
-DB::select( 'people' );
+DB::select( 'people' )->run();
 ```
 
-This will create following query:
+This will run the following query:
 
 ```sql
 select * from `people`
@@ -50,6 +50,20 @@ DB::select( 'posts' )
 	->where( 'user_id', 'in', array( 1, 2, 3 ) )
 	->last( 'created_at' );
 ```
+
+### Execution ( run, find, one etc.. ) 
+
+**Don't forget** that you have to **run** queries. Just executing `DB::select( 'cars' );` will return a `DB\Query` object.
+
+These functions will execute your query and return the results:
+
+ * `run( '<handler>' )`
+ * `first( '<key>', '<handler>' )`
+ * `last( '<key>', '<handler>' )`
+ * `count( '<key>', '<handler>' )`
+ * `find( '<id>', '<key>', '<handler>' )`
+ * `one( '<handler>' )`
+ * `column( '<column>', '<handler>' )`
 
 ### Fields
 
@@ -178,16 +192,36 @@ DB::select( 'people' )->group_by( array( 'age', 'name' ) );
 
 ### Limit, Offset and Page 
 
-Adding an group by:
+When setting the limit to just one entry you will receive your single result and not an array of them.
 
 ```php
-// select * from `people` group by `age`
-DB::select( 'people' )->group_by( 'age' );
+// select * from `people` limit 0, 1
+DB::select( 'people' )->limit( 1 ); // returns stdClass of the single result
 ```
-
-and multiple groups
 
 ```php
-// select * from `people` group by `age`, `name`
-DB::select( 'people' )->group_by( array( 'age', 'name' ) );
+// select * from `people` limit 0, 2
+DB::select( 'people' )->limit( 2 ); // returns an array of stdClasses.
 ```
+
+with offset:
+
+```php
+// select * from `people` limit 25, 10
+DB::select( 'people' )->limit( 25, 10 );
+```
+
+simple paging:
+
+```php
+// select * from `people` limit 0, 25
+DB::select( 'people' )->page( 1 );
+```
+
+The default page size is 25 entries.
+
+```php
+// select * from `people` limit 30, 15
+DB::select( 'people' )->page( 3, 15 );
+```
+
