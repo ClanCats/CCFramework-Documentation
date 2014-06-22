@@ -8,7 +8,7 @@ The shipyard is an helper that generates classes, configuration files, ships and
 It's fast and easy to use give so give it a try.
 
 **Note**: 
-_The shipyard is an console module if you didn't use them before read here more: [Console](/Application/Shipyard/ "Title")_
+_The shipyard is an console module if you didn't use them before read here more:_ [Console](/docs/command_line/ "Title")
 
 
 ## Header settings
