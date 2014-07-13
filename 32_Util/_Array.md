@@ -8,7 +8,7 @@ The CCArr class is a helper class to work with arrays. It implements methods tha
 CCArr::first( array( 'foo', 'bar' ) ); // returns foo
 ```
 
-{{Parser::function_info( 'CCArr::first' )}}
+{[Parser::function_info( 'CCArr::first' )]}
 
 ### Last
 
@@ -16,11 +16,11 @@ CCArr::first( array( 'foo', 'bar' ) ); // returns foo
 CCArr::last( array( 'foo', 'bar' ) ); // returns bar
 ```
 
-{{Parser::function_info( 'CCArr::last' )}}
+{[Parser::function_info( 'CCArr::last' )]}
 
 ### Push
 
-{{Parser::function_info( 'CCArr::push' )}}
+{[Parser::function_info( 'CCArr::push' )]}
 
 #### pass by reference
 
