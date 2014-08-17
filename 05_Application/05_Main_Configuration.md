@@ -269,11 +269,18 @@ A salt used by your application to crypt data. When you install CCF using compos
 
 #### Hash
 
-Defines the default hashing function used by CCStr. You can also can just return a string like `md5`;
+Defines the default hashing function used by CCStr.
+
+To use the builtin (PHP>=5.5) password hashing functions set this to the contant `PASSWORD_DEFAULT` or `PASSWORD_BCRYPT`.
+
+If the function password_hash isn't available, you can add the password-compat patch using composer: `composer require ircmaxell/password-compat:1.0.*`
+
+To make use of any other hashing algorithm simply set a string like `md5`, `sha1` or simply create a function that handles the string to be hashed.
 
 ```php
 'security' => array(
-	'hash' => function( $str ) {
+	'hash' => function( $str ) 
+	{
 		return sha1( $str );
 	}
 ),
