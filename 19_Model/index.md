@@ -230,3 +230,23 @@ $person->password = "BadPassword";
 // string(40) "58fef0c34f52cb5c51188ddfa96a8ee9a5fe4f25"
 var_dump( $person->password );
 ```
+
+---
+
+### Strict assigns
+
+{[Parser::function_info( 'CCModel::strict_assign' )]}
+
+---
+
+### Raw data
+
+Sometimes its needed to access or set data without using any modifiers type assignments etc. for that we have the raw methods.
+
+#### Getting raw data
+
+{[Parser::function_info( 'CCModel::raw' )]}
+
+#### Setting raw data
+
+{[Parser::function_info( 'CCModel::raw_set' )]}
