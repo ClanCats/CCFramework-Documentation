@@ -56,7 +56,7 @@ Our database model follows the _CRUD_ design.
 
 #### Create
 
-Creating new model instances just works like in the normal CCModel. But keep in mind the create command does not save your record to database.
+Creating new model instances just works like in the normal [CCModel](/docs/model/#creating-instances-2). But keep in mind the create command does not save your record to database.
 
 ```php
 $person = new Person;
@@ -266,6 +266,8 @@ protected function _before_assign( $data )
 }
 ```
 
+---
+
 ### Before save
 
 This method gets executed before the data gets saved again to the database. Also here you can modify the data.
@@ -281,6 +283,8 @@ protected function _before_save( $data )
 	return $data; 
 }
 ```
+
+---
 
 ### After save
 
