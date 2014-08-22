@@ -136,3 +136,43 @@ $user->posts()
 ## mass selecting ( with selection )
 
 If you have something like posts and comments you don't wont to select all comments for each post individually.
+
+You can select them in one operation using the `with` method.
+
+```php
+Posts::with( 'comments' );
+```
+
+Or multiple:
+
+```php
+Posts::with( array( 'comments', 'user' ) );
+```
+
+The second argument of the with method is a callback like for the find method.
+
+```php
+$posts = Posts::with( array( 'comments', 'user' ), function( $q ) 
+{
+	$q->order_by( 'created_at', 'desc' );
+	$q->page(1);
+});
+```
+
+By using the `.` separator you can also mass select into deeper dimensions of the relation.
+
+```php
+Posts::with( array( 'comments', 'comments.user', 'user' ) );
+```
+
+And of course you can add callbacks for the relation queries as well:
+
+```php
+Posts::with( array( 
+	'comments' => function( $q )
+	{
+		$q->where( 'created_at', '>', time() - 3600 );
+		$q->page(1);
+	},
+));
+```
