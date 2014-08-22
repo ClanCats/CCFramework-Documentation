@@ -177,3 +177,118 @@ select * from `people` where ( `age` > ? and `age` < ? ) or `id` in (?, ?, ?) or
 ```
 
 And will return an array of model objects because no _limit_ is set.
+
+### Select
+
+The select method returns a query object wich can be modified and has to be executed to receive the model results.
+
+```php
+Person::select()
+	->where( 'age', '>', 18 )
+	->run();
+```
+
+Or a single object:
+
+```php
+Person::select()
+	->where( 'id', 42 )
+	->limit(1)
+	->run();
+```
+
+> **Note:** *The select method returns a `DB\Query` object check out the [select query documentaion](/docs/database/select/) for more information.*
+
+---
+
+## Static properties
+
+There are some static properties that can be configured for each model individually.
+
+### Table
+
+```php
+public static $_table = null;
+```
+
+If you do not define the table property the class name gets used and formatted.
+
+---
+
+### Primary Key
+
+```php
+public static $_primary_key = null;
+```
+
+You can define a custom primary key the default is configured under: `main.config` -> `database.default_primary_key`.
+
+---
+
+### Find modifier
+
+```php
+public static $_find_modifier = null;
+```
+
+You can define a callback that is executed before every select or find. This way you can for example configure a default order for your model.
+
+
+---
+
+### Timestamps
+
+```php
+public static $_timestamps = false;
+```
+
+By setting this little property to `true` the model is going to automatically set the properties `created_at` and `modified_at`.
+
+---
+
+## Events
+
+There are some event callbacks where you can modify data or do some other tasks.
+
+### Before assign
+
+This method gets executed before the data gets passed to the model. Here you can modify data for example decode values.
+
+```php
+protected function _before_assign( $data ) 
+{
+	if ( isset( $data['secret_information'] ) )
+	{
+		$data['secret_information'] = super_secret_decoder( $data['secret_information'] );
+	}
+	
+	return $data; 
+}
+```
+
+### Before save
+
+This method gets executed before the data gets saved again to the database. Also here you can modify the data.
+
+```php
+protected function _before_save( $data ) 
+{
+	if ( isset( $data['secret_information'] ) )
+	{
+		$data['secret_information'] = super_secret_encoder( $data['secret_information'] );
+	}
+
+	return $data; 
+}
+```
+
+### After save
+
+This method gets executed after the data has been saved. No data is passed here but you can make of course use of the object itslef.
+
+```php
+protected function _after_save() 
+{
+	$this->update_children();
+}
+```
